@@ -73,7 +73,7 @@ public class BackgroundLoop : MonoBehaviour
         foreach (GameObject obj in levels)
         {
             repositionChildObjects(obj);
-            float parallaxSpeed = 1 - Mathf.Clamp01(Mathf.Abs(transform.position.z / obj.transform.position.z));
+            float parallaxSpeed = 1 - Mathf.Clamp01(Mathf.Abs(1f / obj.transform.position.z));
             float difference = transform.position.x - lastScreenPosition.x;
             obj.transform.Translate(Vector3.right * difference * parallaxSpeed);
         }
