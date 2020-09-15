@@ -4,11 +4,23 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public float speed = 2f;
+    
     private Animator animator;
     private Rigidbody2D rigidbody;
+    private bool isFlipped = false;
 
-    public float speed = 10f;
+    private float jumpForce = 200f;
+    private float movementSmoothing = .001f;
+    private Vector3 velocity = Vector3.zero;
 
+    private int terrainLayerIndex = 9;
+
+    private bool isGrounded = true;
+    private bool jump = false;
+
+    private float movement = 0.0f;
+ 
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -17,11 +29,72 @@ public class PlayerController : MonoBehaviour
         animator.Play("Idle", 0, 0.25f);
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.W) && isGrounded)
+        {
+            jump = true;
+            isGrounded = false;
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            movement = -speed;
+            if (!isFlipped)
+            {
+                flip();
+            }
+            animator.SetFloat("Speed", speed);
+        }
+
+        else if (Input.GetKey(KeyCode.D))
+        {
+            movement = speed;
+            if (isFlipped)
+            {
+                flip();
+            }
+            animator.SetFloat("Speed", speed);
+        }
+        else
+        {
+            movement = 0;
+            animator.SetFloat("Speed", 0);
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (terrainLayerIndex == col.gameObject.layer)
+        {
+            isGrounded = true;
+        }
+    }
+
     void FixedUpdate()
     {
-        float moveX = Input.GetAxis("Horizontal");
+        //float moveX = Input.GetAxis("Horizontal");
 
-        rigidbody.MovePosition(rigidbody.position + Vector2.right * moveX * speed * Time.deltaTime);
+        //rigidbody.MovePosition(rigidbody.position + Vector2.right * moveX * speed * Time.deltaTime);
+
+        if (movement != 0)
+        {
+            Vector3 targetVelocity = new Vector2(movement, rigidbody.velocity.y);
+            rigidbody.velocity = 
+                Vector3.SmoothDamp(rigidbody.velocity, targetVelocity, ref velocity, movementSmoothing);
+        }
+        if (jump)
+        {
+            rigidbody.AddForce(new Vector2(0f, jumpForce));
+            jump = false;
+        }
+    }
+
+    void flip()
+    {
+        isFlipped = !isFlipped;
+        transform.localScale = new Vector3(transform.localScale.x * -1
+            , transform.localScale.y, transform.localScale.z);
     }
 
     /*public float speed = 10f;
