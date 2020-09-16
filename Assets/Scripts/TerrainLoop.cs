@@ -16,7 +16,7 @@ public class TerrainLoop : MonoBehaviour
         width = firstTerrain.GetComponent<SpriteRenderer>().bounds.size.x;
 
         x1 = firstTerrain.transform.position.x;
-        x2 = x1 + 2;
+        x2 = x1 + width;
     }
 
     void Update()
