@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     private float movementSmoothing = .001f;
     private Vector3 velocity = Vector3.zero;
 
-    private int terrainLayerIndex = 9;
+    private int terrainLayerIndex = 0;
 
     private bool isGrounded = true;
     private bool jump = false;
