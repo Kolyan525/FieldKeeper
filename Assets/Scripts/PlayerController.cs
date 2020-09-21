@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     public float speed = 2f;
     
-    private Animator animator;
+    private Animator playerAnimation;
     private Rigidbody2D rigidbody;
     private bool isFlipped = false;
 
@@ -23,10 +23,10 @@ public class PlayerController : MonoBehaviour
  
     void Start()
     {
-        animator = GetComponent<Animator>();
+        playerAnimation = GetComponent<Animator>();
 
         rigidbody = GetComponent<Rigidbody2D>();
-        animator.Play("Idle", 0, 0.25f);
+        playerAnimation.Play("Idle", 0, 0.25f);
     }
 
     void Update()
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
             {
                 flip();
             }
-            animator.SetFloat("Speed", speed);
+            playerAnimation.SetFloat("Speed", speed);
         }
 
         else if (Input.GetKey(KeyCode.D))
@@ -54,13 +54,15 @@ public class PlayerController : MonoBehaviour
             {
                 flip();
             }
-            animator.SetFloat("Speed", speed);
+            playerAnimation.SetFloat("Speed", speed);
         }
         else
         {
             movement = 0;
-            animator.SetFloat("Speed", 0);
+            playerAnimation.SetFloat("Speed", 0);
         }
+
+        playerAnimation.SetBool("OnGround", isGrounded);
     }
 
     void OnCollisionEnter2D(Collision2D col)
