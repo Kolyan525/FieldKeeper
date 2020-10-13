@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private bool jump = false;
 
     private float movement = 0.0f;
+    public Vector3 respawnPoint;
  
     void Start()
     {
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
         rigidbody = GetComponent<Rigidbody2D>();
         playerAnimation.Play("Idle", 0, 0.25f);
+        respawnPoint = transform.position;
     }
 
     void Update()
@@ -97,6 +99,15 @@ public class PlayerController : MonoBehaviour
         isFlipped = !isFlipped;
         transform.localScale = new Vector3(transform.localScale.x * -1
             , transform.localScale.y, transform.localScale.z);
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.tag == "FallDetector") {
+            transform.position = respawnPoint;
+        }
+        if (other.tag == "Checkpoint") {
+            respawnPoint = other.transform.position;
+        }
     }
 
     /*public float speed = 10f;
