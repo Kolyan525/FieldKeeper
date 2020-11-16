@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
 
     private float movement = 0.0f;
     public Vector3 respawnPoint;
+    public LevelManager gameLevelManager;
  
     void Start()
     {
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         playerAnimation.Play("Idle", 0, 0.25f);
         respawnPoint = transform.position;
+        gameLevelManager = FindObjectOfType<LevelManager>();
     }
 
     void Update()
@@ -103,7 +105,7 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "FallDetector") {
-            transform.position = respawnPoint;
+            gameLevelManager.Respawn();
         }
         if (other.tag == "Checkpoint") {
             respawnPoint = other.transform.position;

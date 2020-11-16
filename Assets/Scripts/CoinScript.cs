@@ -1,12 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using System.Collections;
 
 public class CoinScript : MonoBehaviour
 {
-    int score = 0;
+    private LevelManager gameLevelManager;
+    public int coinValue;
+
     void Start() {
-        
+        gameLevelManager = FindObjectOfType<LevelManager>();
     }
 
     void Update() {
@@ -14,9 +15,9 @@ public class CoinScript : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        Debug.Log("Triggered");
-        Destroy (gameObject);
-        score += 1;
-        Debug.Log($"Score: {score}");
+        if (other.tag == "Player"){
+            gameLevelManager.AddCoins(coinValue);
+            Destroy (gameObject);
+        }
     }
 }
